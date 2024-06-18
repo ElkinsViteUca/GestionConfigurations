@@ -186,8 +186,8 @@ class Televisor(ModeloBase):
   stock = models.IntegerField(default=0, blank=True, null=True,verbose_name=u"Stock")
 
   def get_image(self):
-    if self.imagen:
-      return '{}{}'.format(settings.MEDIA_URL, self.imagen)
+    if self.foto:
+      return '{}{}'.format(settings.MEDIA_URL, self.foto)
     return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
 
 #******************************************** Refrigeradora ********************************************************
@@ -265,6 +265,6 @@ class Refrigeradora(ModeloBase):
 
 
   def get_image(self):
-    if self.imagen:
-      return '{}{}'.format(settings.MEDIA_URL, self.imagen)
+    if self.foto:
+      return '{}{}'.format(settings.MEDIA_URL, self.foto)
     return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
