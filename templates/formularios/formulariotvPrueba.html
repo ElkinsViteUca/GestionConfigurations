@@ -1,0 +1,54 @@
+{% extends 'form.html' %}
+{% load static %}
+{% block controls %}
+
+   <div class="row">
+      <div class="input-field col s6">
+          {{ form.nombretv }}
+        <label for="first_name">{{ span }}</label>
+      </div>
+
+      <div class="input-field col s6">
+        {{ form.marca }}
+        <label>Marca</label>
+      </div>
+    </div>
+
+    <div class="file-field input-field col s6">
+        <div class="btn">
+          <span>{{ span1 }}</span>
+        </div>
+        <div class="file-path-wrapper">
+            {{ form.imagen }}
+        </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s4">
+        {{ form.pulgadas }}
+          <label for="last_name">Pulgadas</label>
+      </div>
+
+      <div class="input-field col s4">
+          {{ form.costo }}
+        <label for="last_name">Precio</label>
+      </div>
+
+      <div class="input-field col s4">
+          {{ form.stock }}
+        <label for="last_name">Stock</label>
+      </div>
+        <div class="input-field col s4">
+            {{ form.tipoPanel }}
+            <label>Seleccione Panel</label>
+        </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s4">
+        {{ form.resolucion }}
+          <label for="last_name">Resoluciòn</label>
+      </div>
+
+   {% comment %}{{ form.as_p }}{% endcomment %}
+
+    {% endblock %}
