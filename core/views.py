@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -17,7 +19,7 @@ class InicioTemplateView(TemplateView):
     return context
 
 class televisorListView(ListView):
-  template_name = "listadotv.html"
+  template_name = "formularios/listadotv.html"
   context_object_name = 'Televisor'
   model = Televisor
 
@@ -31,24 +33,7 @@ class televisorListView(ListView):
     context['query'] = self.request.GET.get("query")
     return context
 
-# class (CreateView):
-#     template_name = 'formularios/formulariotvPrueba.html'
-#     model = Televisor
-#     success_url = reverse_lazy('listatelevisores')
-#     form_class = TelevisorForm
-#
-#     def get_context_data(self, **kwargs):
-#       context = super().get_context_data(**kwargs)
-#       context['titulo'] = "CREAR REGISTRO TV "
-#       context['boton'] = "Guardar Registro"
-#       context['listar_url'] = '/listatelevisores/'
-#       context['action_save'] = '/creartelevisores/'
-#       #context['span'] = "Ingrese Activo"
-#       return context
-#
-#     def post(self,request,*args ,**kwargs):
-#       print(request.POST)
-#       return redirect('listatelevisores')
+
 
 class televisorCreateView(CreateView):
     template_name = 'formularios/formulariotvPrueba.html'
@@ -62,29 +47,42 @@ class televisorCreateView(CreateView):
       context['boton'] = "Guardar Registro"
       context['listar_url'] = '/listaempleado/'
       context['action_save'] = '/creartelevisores/'
+      context['form_title'] = 'Formulario TV'
       return context
 
+#     def post(self,request,*args ,**kwargs):
+#       print(request.POST)
+#       return redirect('listatelevisores')
 
 class actualizarTelevisor(UpdateView):
-  template_name = "formEmpleado.html"
   model = Televisor
-  form_class = TelevisorForm
+  template_name = "formularios/formulariotvPrueba.html"
   success_url = reverse_lazy('listatelevisores')
-
-  # queryset = Cliente.objects.get(pk=request.GET.get("id"))
+  form_class = TelevisorForm
+  #queryset = Televisor.objects.get(pk=request.GET.get("id"))
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['action_save'] = self.request.path
-    context['titulo'] = 'ACTUALIZAR REGISTRO TV'
-    context['listar_url'] = '/listaempleado'
+    context['titulo'] = 'Administrador'
+    context['form_title'] = 'ACTUALIZAR REGISTRO TV'
+    context['listar_url'] = '/listatelevisores'
     context['boton'] = "Actualizar"
-    context['span'] = "Nombre del Televisor"
-    context['span1'] = "IMG"
-    context['span2'] = "Célular del Empleado"
-    context['span3'] = "Género del Empleado"
-    context['span4'] = "Correo del Empleado"
+    context['table_title'] = 'Listado TV'
     return context
+
+  class eliminarTelevisor(DeleteView):
+    model = Televisor
+    template_name = "arita/deleteArea.html"
+    success_url = reverse_lazy('listatelevisores')
+
+    def get_context_data(self, **kwargs):
+      context = super().get_context_data(**kwargs)
+      context['action_save'] = self.request.path
+      context['titulo'] = 'ELMINACIÓN DE AREA'
+      context['listar_url'] = '/listatelevisores'
+      context['boton'] = "Eliminar"
+      return context
 
 
 #******************************************** Refrigeradora ********************************************************

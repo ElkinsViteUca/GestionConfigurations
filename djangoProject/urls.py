@@ -19,7 +19,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from djangoProject import settings
-from core.views import InicioTemplateView,televisorListView,refrigeradoraListView,televisorCreateView
+from core.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +28,7 @@ urlpatterns = [
 
     path('listatelevisores/',televisorListView.as_view(),name='listatelevisores'),
     path('creartelevisores/',televisorCreateView.as_view(),name='creartelevisores'),
+    path('actualizartv/<int:pk>',actualizarTelevisor.as_view(),name='actualizartv'),
 
     path('listarefrigeradoras/',refrigeradoraListView.as_view(),name='listarefrigeradoras'),
 ]
