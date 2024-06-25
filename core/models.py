@@ -182,12 +182,12 @@ class Televisor(ModeloBase):
   tipoPanel = models.ForeignKey(Panel,blank=True, null=True, default='', verbose_name=u'Panel',on_delete=models.SET_NULL)
   resolucion = models.CharField(default='', max_length=50, verbose_name=u'Resolución')
   imagen = models.FileField("Foto", upload_to="core/televisores", blank=True, null=True)
-  costo = models.DecimalField(default=0, max_digits=30, decimal_places=4, verbose_name=u"Costo")
+  costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
   stock = models.IntegerField(default=0, blank=True, null=True,verbose_name=u"Stock")
 
   def get_image(self):
-    if self.foto:
-      return '{}{}'.format(settings.MEDIA_URL, self.foto)
+    if self.imagen:
+      return '{}{}'.format(settings.MEDIA_URL, self.imagen)
     return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
 
 #******************************************** Refrigeradora ********************************************************
@@ -259,12 +259,76 @@ class Refrigeradora(ModeloBase):
   dimensiones = models.CharField(default='0x0x0', max_length=50, verbose_name=u'Dimensiones altura*hancho*profundidad')
   refrigeradoraColor = models.ForeignKey(Color,blank=True, null=True, default='', verbose_name=u'Color',on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/refrigeradora", blank=True, null=True)
-  costo = models.DecimalField(default=0, max_digits=30, decimal_places=4, verbose_name=u"Costo")
+  costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
   stock = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Stock")
 
 
 
   def get_image(self):
-    if self.foto:
-      return '{}{}'.format(settings.MEDIA_URL, self.foto)
+    if self.imagen:
+      return '{}{}'.format(settings.MEDIA_URL, self.imagen)
     return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
+
+
+#******************************************** Microondas ********************************************************
+
+class marcaMicroondas(ModeloBase):
+  marcaMicroondas = models.CharField(default='', max_length=20, verbose_name=u'Marca')
+
+  def __str__(self):
+    return u'%s' % self.marcaMicroondas
+
+  class Meta:
+    verbose_name = u"Marca"
+    verbose_name_plural = u"Marcas"
+    unique_together = ('marcaMicroondas',)
+
+  def en_uso(self):
+    if self.item_set.values('id').filter(status=True).exists():
+      return True
+    return False
+
+  def save(self, *args, **kwargs):
+    self.color = self.marcaMicroondas.upper()
+    super(marcaMicroondas, self).save(*args, **kwargs)
+
+
+class modeloMicroondas(ModeloBase):
+  modelo = models.CharField(default='', max_length=20, verbose_name=u'Modelo')
+
+  def __str__(self):
+    return u'%s' % self.modelo
+
+  class Meta:
+    verbose_name = u"Modelo"
+    verbose_name_plural = u"Modelo"
+    unique_together = ('modelo',)
+
+  def en_uso(self):
+    if self.item_set.values('id').filter(status=True).exists():
+      return True
+    return False
+
+  def save(self, *args, **kwargs):
+    self.color = self.modelo.upper()
+    super(modeloMicroondas, self).save(*args, **kwargs)
+
+class Microondas(ModeloBase):
+  nombremicroondas = models.CharField(default='', max_length=20, verbose_name='Microondas')
+  marcaMicroondas = models.ForeignKey(marcaMicroondas, blank=True, null=True, default='', verbose_name=u'Marca',
+                                              on_delete=models.SET_NULL)
+  modelo = models.ForeignKey(modeloMicroondas, default='', blank=True, null=True, verbose_name=u'Modelo',
+                                               on_delete=models.SET_NULL)
+  capacidad = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Capacidad")
+  dimensiones = models.CharField(default='0x0x0', max_length=50, verbose_name=u'Dimensiones altura*hancho*profundidad')
+  microondasColor = models.ForeignKey(Color, blank=True, null=True, default='', verbose_name=u'Color',
+                                         on_delete=models.SET_NULL)
+  imagen = models.FileField("Foto", upload_to="core/microondas", blank=True, null=True)
+  costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
+  stock = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Stock")
+
+  def get_image(self):
+    if self.imagen:
+      return '{}{}'.format(settings.MEDIA_URL, self.imagen)
+    return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
+  pass

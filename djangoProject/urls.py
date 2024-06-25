@@ -31,6 +31,12 @@ urlpatterns = [
     path('actualizartv/<int:pk>',actualizarTelevisor.as_view(),name='actualizartv'),
 
     path('listarefrigeradoras/',refrigeradoraListView.as_view(),name='listarefrigeradoras'),
+    path('crearrefrigeradoras/',refrigeradoraCreateView.as_view(),name='crearrefrigeradoras'),
+    path('actualizarrefrigeradoras/<int:pk>',actualizarRefrigeradora.as_view(),name='actualizarrefrigeradoras'),
+
+    path('listamicroondas/',microondasListView.as_view(),name='listamicroondas'),
+    path('crearmicroondas/',microondasCreateView.as_view(),name='crearmicroondas'),
+    path('actualizarmicroondas/<int:pk>',actualizarMicroondas.as_view(),name='actualizarmicroondas'),
 ]
 if settings.DEBUG:
   urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
