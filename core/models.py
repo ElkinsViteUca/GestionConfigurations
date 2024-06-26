@@ -189,6 +189,10 @@ class Televisor(ModeloBase):
     if self.imagen:
       return '{}{}'.format(settings.MEDIA_URL, self.imagen)
     return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
+  pass
+
+  def __str__(self):
+    return u'%s' % self.imagen
 
 #******************************************** Refrigeradora ********************************************************
 class MarcaRefri(ModeloBase):
@@ -261,8 +265,6 @@ class Refrigeradora(ModeloBase):
   imagen = models.FileField("Foto", upload_to="core/refrigeradora", blank=True, null=True)
   costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
   stock = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Stock")
-
-
 
   def get_image(self):
     if self.imagen:

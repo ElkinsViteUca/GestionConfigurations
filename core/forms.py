@@ -14,7 +14,7 @@ class TelevisorForm(ModelForm):
       'pulgadas': forms.TextInput(attrs={ 'placeholder': 'Ingrese las Pulgadas'}),
       'tipoPanel': forms.Select(attrs={ 'placeholder': 'Ingrese la Marca'}),
       'resolucion': forms.TextInput(attrs={ 'placeholder': 'Ingrese las Pulgadas'}),
-      'imagen': forms.FileInput(attrs={ 'required': True}),
+      'imagen': forms.FileInput(attrs={ 'required': False}),
       'costo': forms.NumberInput(attrs={ 'required': True}),
       'stock': forms.NumberInput(attrs={ 'required': True}),
 
@@ -32,7 +32,7 @@ class RefrigeradoraForm(ModelForm):
       'capacidadLitros': forms.NumberInput(attrs={'class': 'form-control', 'required': True, 'placeholder': 'Ingrese los Litros'}),
       'dimensiones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese las Dimensiones'}),
       'refrigeradoraColor': forms.Select(attrs={'class': 'form-control'}),
-      'imagen': forms.FileInput(attrs={'class': 'form-control', 'required': True}),
+      'imagen': forms.FileInput(attrs={'class': 'form-control', 'required': False}),
       'costo': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
       'stock': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
 
@@ -52,7 +52,7 @@ class MicroondasForm(ModelForm):
         attrs={'class': 'form-control', 'required': True, 'placeholder': 'Ingrese los Litros'}),
       'dimensiones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese las Dimensiones'}),
       'microondasColor': forms.Select(attrs={'class': 'form-control'}),
-      'imagen': forms.FileInput(attrs={'class': 'form-control', 'required': True}),
+      'imagen': forms.FileInput(attrs={'class': 'form-control', 'required': False}),
       'costo': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
       'stock': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
     }

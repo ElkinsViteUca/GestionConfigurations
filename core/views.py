@@ -1,5 +1,4 @@
-from urllib import request
-
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -17,6 +16,8 @@ class InicioTemplateView(TemplateView):
     context = super().get_context_data(**kwargs)
     context['titulo'] = "Administrador"
     return context
+
+
 
 class televisorListView(ListView):
   template_name = "formularios/listadotv.html"
@@ -72,18 +73,20 @@ class actualizarTelevisor(UpdateView):
     context['table_title'] = 'Listado TV'
     return context
 
-  class eliminarTelevisor(DeleteView):
-    model = Televisor
-    template_name = "arita/deleteArea.html"
-    success_url = reverse_lazy('listatelevisores')
+class eliminarTelevisor(DeleteView):
+  model = Televisor
+  template_name = "formularios/eliminarTv.html"
+  success_url = reverse_lazy('listatelevisores')
 
-    def get_context_data(self, **kwargs):
-      context = super().get_context_data(**kwargs)
-      context['action_save'] = self.request.path
-      context['titulo'] = 'ELMINACIÓN DE AREA'
-      context['listar_url'] = '/listatelevisores'
-      context['boton'] = "Eliminar"
-      return context
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['action_save'] = self.request.path
+    context['titulo'] = 'Administrador'
+    context['form_title'] = 'Eliminación De Registro TV'
+    context['listar_url'] = '/listatelevisores'
+    context['boton'] = "Eliminar"
+    context['table_title'] = 'Seguro Que Deseas Eliminar este Registro?'
+    return context
 
 
 #******************************************** Refrigeradora ********************************************************
@@ -134,6 +137,20 @@ class actualizarRefrigeradora(UpdateView):
     context['table_title'] = 'Listado Refrigeradora'
     return context
 
+class eliminarRefrigeradora(DeleteView):
+  model = Refrigeradora
+  template_name = "formularios/eliminarRefri.html"
+  success_url = reverse_lazy('listarefrigeradoras')
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['action_save'] = self.request.path
+    context['titulo'] = 'Eliminación De Refrigeradora'
+    context['listar_url'] = '/listatelevisores'
+    context['boton'] = "Eliminar"
+    context['table_title'] = 'Seguro Que Deseas Eliminar este Registro?'
+    return context
+
 #******************************************** Microondas ********************************************************
 class microondasListView(ListView):
   template_name = "formularios/listadoMicroo.html"
@@ -180,4 +197,18 @@ class actualizarMicroondas(UpdateView):
     context['listar_url'] = '/listamicroondas'
     context['boton'] = "Actualizar"
     context['table_title'] = 'Listado de Microondas'
+    return context
+
+class eliminarMicroondas(DeleteView):
+  model = Microondas
+  template_name = "formularios/eliminarMicroo.html"
+  success_url = reverse_lazy('listamicroondas')
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['action_save'] = self.request.path
+    context['titulo'] = 'Eliminación De Refrigeradora'
+    context['listar_url'] = '/listamicroondas'
+    context['boton'] = "Eliminar"
+    context['table_title'] = 'Seguro Que Deseas Eliminar este Registro?'
     return context

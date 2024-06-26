@@ -1,4 +1,4 @@
-{% extends 'listadoBase.html' %}
+{% extends 'delateBase.html' %}
 
 {% block columns %}
     <th>Nombre</th>
@@ -9,13 +9,10 @@
     <th>Foto</th>
     <th>Precio</th>
     <th>Stock</th>
-    <th>Acciones</th>
 {% endblock %}
 
 {% block rows %}
 
-    {% if object_list %}
-    {% for object in Televisor %}
     <tr>
       <td>{{ object.nombretv }}</td>
       <td>{{ object.marca }}</td>
@@ -27,12 +24,6 @@
       </td>
       <td>{{ object.costo }}</td>
       <td>{{ object.stock }}</td>
-      <td><a class="waves-effect waves-light btn-small" href="{%  url 'actualizartv' object.id %} ">Editar ✏️</a>
-        <a class="waves-effect red darken-4 btn-small" href={%  url 'eliminartv' object.id %}>Eliminar <i class="large material-icons">clear</i></a>
-      </td>
     </tr>
-    {% endfor %}
-    {% else %}
-        <h1>No hay registros</h1>
-    {% endif %}
+
 {% endblock %}

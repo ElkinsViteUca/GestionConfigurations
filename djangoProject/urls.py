@@ -20,23 +20,39 @@ from django.contrib import admin
 from django.urls import path
 from djangoProject import settings
 from core.views import *
+from core.login.views import LoginAdminView,LogoutView
+from core.public.views import indexTemplateView,televisorPublicListView, RefriPublicListView, microoPublicListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('',InicioTemplateView.as_view(),name="inicio"),
+    path('login/',LoginAdminView.as_view(),name='login'),
+    path('logout/',LogoutView.as_view(next_page=''),name='logout'),
+
+    path('',indexTemplateView.as_view(),name=''),
+    path('tvpublic/',televisorPublicListView.as_view(),name='tvpublic'),
+    path('refripublic/',RefriPublicListView.as_view(),name='refripublic'),
+    path('micropublic/',microoPublicListView.as_view(),name='micropublic'),
+
+
+
+    path('inicioadmin/',InicioTemplateView.as_view(),name="inicioadmin"),
 
     path('listatelevisores/',televisorListView.as_view(),name='listatelevisores'),
     path('creartelevisores/',televisorCreateView.as_view(),name='creartelevisores'),
     path('actualizartv/<int:pk>',actualizarTelevisor.as_view(),name='actualizartv'),
+    path('eliminartv/<int:pk>',eliminarTelevisor.as_view(),name='eliminartv'),
 
     path('listarefrigeradoras/',refrigeradoraListView.as_view(),name='listarefrigeradoras'),
     path('crearrefrigeradoras/',refrigeradoraCreateView.as_view(),name='crearrefrigeradoras'),
     path('actualizarrefrigeradoras/<int:pk>',actualizarRefrigeradora.as_view(),name='actualizarrefrigeradoras'),
+    path('eliminarrefrigeradoras/<int:pk>',eliminarRefrigeradora.as_view(),name='eliminarrefrigeradoras'),
 
     path('listamicroondas/',microondasListView.as_view(),name='listamicroondas'),
     path('crearmicroondas/',microondasCreateView.as_view(),name='crearmicroondas'),
     path('actualizarmicroondas/<int:pk>',actualizarMicroondas.as_view(),name='actualizarmicroondas'),
+    path('eliminarmicroondas/<int:pk>',eliminarMicroondas.as_view(),name='eliminarmicroondas'),
+
 ]
 if settings.DEBUG:
   urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
