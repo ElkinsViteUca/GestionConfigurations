@@ -1,0 +1,59 @@
+[33mcommit f900ae2a36f886119080449476b3a2bc9f1c9bb3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Elkins <eviteu@unemi.edu.ec>
+Date:   Wed Jun 26 00:43:48 2024 -0500
+
+    navbar_Empleado
+
+[33mcommit 66983f5aac23ed8241129ecf1b284f57b0c3fb7e[m
+Author: Elkins <eviteu@unemi.edu.ec>
+Date:   Wed Jun 26 00:38:38 2024 -0500
+
+    Delete_Index_Todo
+
+[33mcommit 9ed5010979371ae006dead30d14bd5807d85fdc6[m
+Author: Elkins <eviteu@unemi.edu.ec>
+Date:   Tue Jun 25 00:03:10 2024 -0500
+
+    Create_Update_Microo_Refri
+
+[33mcommit dcf3af23777f8984743830469e23deb02afccea0[m
+Author: Elkins Vite Uca <eviteu@unemi.edu.ec>
+Date:   Fri Jun 21 17:18:54 2024 -0500
+
+    Listados Actualizados
+
+[33mcommit 9bc66dfa7addfd7edbda40351a9a5da887b752e8[m
+Author: Elkins Vite Uca <eviteu@unemi.edu.ec>
+Date:   Mon Jun 17 23:58:03 2024 -0500
+
+    requirements
+
+[33mcommit dc0ded8fd2346b2e02adaec366c5c7c9c6f1fca8[m
+Merge: 8360997 b08b34e
+Author: Elkins Vite Uca <eviteu@unemi.edu.ec>
+Date:   Mon Jun 17 23:26:57 2024 -0500
+
+    Merge remote-tracking branch 'origin/main'
+    
+    # Conflicts:
+    #       core/models.py
+
+[33mcommit 8360997f1e389a98b9d5f35b87ba496b705ed3bd[m
+Author: Elkins Vite Uca <eviteu@unemi.edu.ec>
+Date:   Mon Jun 17 23:25:37 2024 -0500
+
+    CreateTelevisor_Funcional
+
+[33mcommit b08b34ee16301bf38c9fa2f5f81379126d60cca2[m
+Author: ElkinsViteUca <85906620+ElkinsViteUca@users.noreply.github.com>
+Date:   Mon Jun 17 10:11:57 2024 -0500
+
+    Update models.py
+    
+    self.foto a self.image
+
+[33mcommit ef8f3ef7af61e6d823a90c582a60deb4270c7172[m
+Author: Elkins Vite Uca <eviteu@unemi.edu.ec>
+Date:   Wed Jun 12 18:36:35 2024 -0500
+
+    Modelos Televisor,Refrigeradora
