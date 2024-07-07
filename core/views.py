@@ -1,10 +1,12 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect, JsonResponse
+from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import View
-from django.views.generic import TemplateView,ListView,CreateView,UpdateView,DeleteView
-from core.models import *
+from django.views.generic import TemplateView,ListView
+from django.views.generic.edit import CreateView,UpdateView,DeleteView
+
 from .forms import *
 # Create your views here.
 
@@ -23,6 +25,7 @@ class televisorListView(ListView):
   template_name = "formularios/listadotv.html"
   context_object_name = 'Televisor'
   model = Televisor
+  queryset = Televisor.objects.filter(estado=False)
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -52,16 +55,20 @@ class televisorCreateView(CreateView):
       context['form_title'] = 'Formulario TV'
       return context
 
-#     def post(self,request,*args ,**kwargs):
-#       print(request.POST)
-#       return redirect('listatelevisores')
+   # def post(self, request, *args, **kwargs):
+   #   stock = self.request.POST['stock']
+   #   form = TelevisorForm(request.POST)
+   #   form.save()
+   #   print(stock)
+   #   return JsonResponse({'message': 'Todo bien'})
+
+
 
 class actualizarTelevisor(UpdateView):
   model = Televisor
   template_name = "formularios/formulariotvPrueba.html"
   success_url = reverse_lazy('listatelevisores')
   form_class = TelevisorForm
-  #queryset = Televisor.objects.get(pk=request.GET.get("id"))
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -73,27 +80,53 @@ class actualizarTelevisor(UpdateView):
     context['table_title'] = 'Listado TV'
     return context
 
+  # def post(self, request, *args, **kwargs):
+  #   stock = self.request.POST['stock']
+  #   print(stock)
+  #   return JsonResponse({'message': 'Todo bien'})
+
+  # def post(self, request, *args, **kwargs):
+  #   self.object = self.get_object()
+  #
+  #   # Obtener el formulario con los datos recibidos por POST y la instancia actual
+  #   form = self.get_form()
+  #
+  #   if form.is_valid():
+  #     # Guardar los datos del formulario en la instancia actual del Televisor
+  #     self.object.stock = request.POST.get('stock', '')  # Actualiza el campo 'stock' según necesites
+  #     self.object.save()
+  #
+  #     # Redirigir a la URL de éxito
+  #     return HttpResponseRedirect(self.get_success_url())
+  #   else:
+  #     # Si el formulario no es válido, volver a renderizar el formulario con los errores
+  #     return self.form_invalid(form)
+
+
 class eliminarTelevisor(DeleteView):
   model = Televisor
   template_name = "formularios/eliminarTv.html"
-  success_url = reverse_lazy('listatelevisores')
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['action_save'] = self.request.path
     context['titulo'] = 'Administrador'
     context['form_title'] = 'Eliminación De Registro TV'
-    context['listar_url'] = '/listatelevisores'
     context['boton'] = "Eliminar"
     context['table_title'] = 'Seguro Que Deseas Eliminar este Registro?'
     return context
-
+  def post(self, request,pk, *args, **kwargs):
+    object = Televisor.objects.get(id=pk)
+    object.estado = True
+    object.save()
+    return redirect('listatelevisores')
 
 #******************************************** Refrigeradora ********************************************************
 class refrigeradoraListView(ListView):
   template_name = "formularios/listadoRefrigeradora.html"
   context_object_name = 'Refrigeradora'
   model = Refrigeradora
+  queryset = Refrigeradora.objects.filter(estado=False)
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -140,22 +173,29 @@ class actualizarRefrigeradora(UpdateView):
 class eliminarRefrigeradora(DeleteView):
   model = Refrigeradora
   template_name = "formularios/eliminarRefri.html"
-  success_url = reverse_lazy('listarefrigeradoras')
+
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['action_save'] = self.request.path
     context['titulo'] = 'Eliminación De Refrigeradora'
-    context['listar_url'] = '/listatelevisores'
     context['boton'] = "Eliminar"
     context['table_title'] = 'Seguro Que Deseas Eliminar este Registro?'
     return context
+
+  def post(self, request,pk, *args, **kwargs):
+    object = Refrigeradora.objects.get(id=pk)
+    object.estado = True
+    object.save()
+    return redirect('listarefrigeradoras')
+
 
 #******************************************** Microondas ********************************************************
 class microondasListView(ListView):
   template_name = "formularios/listadoMicroo.html"
   context_object_name = 'Microondas'
   model = Microondas
+  queryset = Microondas.objects.filter(estado=False)
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -202,13 +242,18 @@ class actualizarMicroondas(UpdateView):
 class eliminarMicroondas(DeleteView):
   model = Microondas
   template_name = "formularios/eliminarMicroo.html"
-  success_url = reverse_lazy('listamicroondas')
+
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
     context['action_save'] = self.request.path
     context['titulo'] = 'Eliminación De Refrigeradora'
-    context['listar_url'] = '/listamicroondas'
     context['boton'] = "Eliminar"
     context['table_title'] = 'Seguro Que Deseas Eliminar este Registro?'
     return context
+
+  def post(self, request, pk,*args, **kwargs):
+    object = Microondas.objects.get(id=pk)
+    object.estado = True
+    object.save()
+    return redirect('listamicroondas')

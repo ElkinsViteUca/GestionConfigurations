@@ -17,6 +17,7 @@ class televisorPublicListView(ListView):
   template_name = "Public/listTvPublic.html"
   context_object_name = 'Televisor'
   model = Televisor
+  queryset = Televisor.objects.filter(estado=False)
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -33,6 +34,7 @@ class RefriPublicListView(ListView):
   template_name = "Public/listRefriPublic.html"
   context_object_name = 'Refrigeradora'
   model = Refrigeradora
+  queryset = Refrigeradora.objects.filter(estado=False)
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -49,6 +51,7 @@ class microoPublicListView(ListView):
   template_name = "Public/listMicroPublic.html"
   context_object_name = 'Microondas'
   model = Microondas
+  queryset = Microondas.objects.filter(estado=False)
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)

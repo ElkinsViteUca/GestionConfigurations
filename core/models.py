@@ -142,8 +142,8 @@ class Marca(ModeloBase):
     return u'%s' % self.nombreMarca
 
   class Meta:
-    verbose_name = u"Marca"
-    verbose_name_plural = u"Marcas"
+    verbose_name = u"Marca de Televisor"
+    verbose_name_plural = u"Marcas de Televisor"
     unique_together = ('nombreMarca',)
 
   def en_uso(self):
@@ -175,15 +175,36 @@ class Panel(ModeloBase):
     self.nombrePanel = self.nombrePanel.upper()
     super(Panel, self).save(*args, **kwargs)
 
+class Resolucion(ModeloBase):
+  nombreResol = models.CharField(default='', max_length=100, verbose_name=u'Resolución')
+
+  def __str__(self):
+    return u'%s' % self.nombreResol
+
+  class Meta:
+    verbose_name = u"Resolución"
+    verbose_name_plural = u"Resoluciones"
+    unique_together = ('nombreResol',)
+
+  def en_uso(self):
+    if self.item_set.values('id').filter(status=True).exists():
+      return True
+    return False
+
+  def save(self, *args, **kwargs):
+    self.nombreResol = self.nombreResol.upper()
+    super(Resolucion, self).save(*args, **kwargs)
+
 class Televisor(ModeloBase):
   nombretv = models.CharField(default='', max_length=50, verbose_name=u'Televisor')
   marca = models.ForeignKey(Marca,blank=True, null=True, default='', verbose_name=u'Marca',on_delete=models.SET_NULL)
   pulgadas = models.CharField(default='', max_length=50, verbose_name=u'Pulgadas')
   tipoPanel = models.ForeignKey(Panel,blank=True, null=True, default='', verbose_name=u'Panel',on_delete=models.SET_NULL)
-  resolucion = models.CharField(default='', max_length=50, verbose_name=u'Resolución')
+  resolucion = models.ForeignKey(Resolucion,blank=True, null=True,default='', max_length=50, verbose_name=u'Resolución',on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/televisores", blank=True, null=True)
-  costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
-  stock = models.IntegerField(default=0, blank=True, null=True,verbose_name=u"Stock")
+  costo = models.DecimalField(default=0, max_digits=7, decimal_places=2, verbose_name=u"Costo")
+  stock = models.IntegerField(default=0,blank=True, null=True, verbose_name=u"Stock")
+  estado = models.BooleanField(default=False)
 
   def get_image(self):
     if self.imagen:
@@ -202,8 +223,8 @@ class MarcaRefri(ModeloBase):
     return u'%s' % self.marcaRefri
 
   class Meta:
-    verbose_name = u"Marca"
-    verbose_name_plural = u"Marcas"
+    verbose_name = u"Marca de Refri"
+    verbose_name_plural = u"Marcas de Refri"
     unique_together = ('marcaRefri',)
 
   def en_uso(self):
@@ -222,8 +243,8 @@ class ModeloRefri(ModeloBase):
     return u'%s' % self.modeloRefri
 
   class Meta:
-    verbose_name = u"Modelo"
-    verbose_name_plural = u"Modelos"
+    verbose_name = u"Modelo de Refri"
+    verbose_name_plural = u"Modelos de Refri"
     unique_together = ('modeloRefri',)
 
   def en_uso(self):
@@ -264,12 +285,13 @@ class Refrigeradora(ModeloBase):
   refrigeradoraColor = models.ForeignKey(Color,blank=True, null=True, default='', verbose_name=u'Color',on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/refrigeradora", blank=True, null=True)
   costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
-  stock = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Stock")
+  stock = models.IntegerField(default=0,  verbose_name=u"Stock")
+  estado = models.BooleanField(default=False)
 
   def get_image(self):
     if self.imagen:
       return '{}{}'.format(settings.MEDIA_URL, self.imagen)
-    return '{}{}'.format(settings.STATIC_URL, 'img/default/empty.jpg')
+    return '{}{}'.format(settings.STATIC_URL, 'static/img/default/empty.jpg')
 
 
 #******************************************** Microondas ********************************************************
@@ -281,8 +303,8 @@ class marcaMicroondas(ModeloBase):
     return u'%s' % self.marcaMicroondas
 
   class Meta:
-    verbose_name = u"Marca"
-    verbose_name_plural = u"Marcas"
+    verbose_name = u"Marca de Microonda"
+    verbose_name_plural = u"Marcas de Microonda"
     unique_together = ('marcaMicroondas',)
 
   def en_uso(self):
@@ -302,8 +324,8 @@ class modeloMicroondas(ModeloBase):
     return u'%s' % self.modelo
 
   class Meta:
-    verbose_name = u"Modelo"
-    verbose_name_plural = u"Modelo"
+    verbose_name = u"Modelo de Microonda"
+    verbose_name_plural = u"Modelo de Microondas"
     unique_together = ('modelo',)
 
   def en_uso(self):
@@ -326,8 +348,9 @@ class Microondas(ModeloBase):
   microondasColor = models.ForeignKey(Color, blank=True, null=True, default='', verbose_name=u'Color',
                                          on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/microondas", blank=True, null=True)
-  costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
+  costo = models.DecimalField(default=0, max_digits=7, decimal_places=2, verbose_name=u"Costo")
   stock = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Stock")
+  estado = models.BooleanField(default=False)
 
   def get_image(self):
     if self.imagen:
