@@ -5,15 +5,15 @@ from djangoProject import settings
 
 # Create your models here.
 class Sexo(ModeloBase):
-  nombre = models.CharField(default='', max_length=100, verbose_name=u'Nombre')
+  nombre = models.CharField(default='',blank=False,null=True, max_length=100, verbose_name=u'Sexo')
 
   def __str__(self):
-    return u'%s' % self.nombre
+    return "{}".format(self.nombre)
 
   class Meta:
     verbose_name = u"Sexo"
     verbose_name_plural = u"Sexos"
-    unique_together = ('nombre',)
+    ordering = ['nombre']
 
   def save(self, *args, **kwargs):
     self.nombre = self.nombre.upper()
@@ -22,23 +22,14 @@ class Sexo(ModeloBase):
 class Pais(ModeloBase):
   nombre = models.CharField(default='', max_length=100, verbose_name=u"Nombre")
 
-  @staticmethod
-  def flexbox_query(q, extra=None):
-    if extra:
-      return eval('Pais.objects.filter(Q(nombre__contains="%s")).filter(%s).distinct()[:25]' % (q, extra))
-    return Pais.objects.filter(Q(nombre__contains=q)).distinct()[:25]
-
-  def flexbox_repr(self):
-    return self.__str__()
 
   def __str__(self):
-    return u'%s' % self.nombre
+    return "{}".format(self.nombre)
 
   class Meta:
     verbose_name = u"País"
     verbose_name_plural = u"Paises"
     ordering = ['nombre']
-    unique_together = ('nombre',)
 
   def en_uso(self):
     return self.provincia_set.values('id').all().exists()
@@ -48,20 +39,12 @@ class Pais(ModeloBase):
     super(Pais, self).save(*args, **kwargs)
 
 class Provincia(ModeloBase):
-  pais = models.ForeignKey(Pais, blank=True, null=True, verbose_name=u'País', on_delete=models.CASCADE)
-  nombre = models.CharField(default='', max_length=100, verbose_name=u"Nombre")
+  pais = models.ForeignKey(Pais, blank=False, null=True, verbose_name=u'País', on_delete=models.CASCADE)
+  nombre = models.CharField(default='',blank=False,null=True, max_length=100, verbose_name=u"Nombre")
 
-  @staticmethod
-  def flexbox_query(q, extra=None):
-    if extra:
-      return eval('Provincia.objects.filter(Q(nombre__contains="%s")).filter(%s).distinct()[:25]' % (q, extra))
-    return Provincia.objects.filter(Q(nombre__contains=q)).distinct()[:25]
-
-  def flexbox_repr(self):
-    return self.__str__()
 
   def __str__(self):
-    return u'%s' % self.nombre
+    return "{} - {}".format(self.pais,self.nombre)
 
   class Meta:
     verbose_name = u"Provincia"
@@ -77,20 +60,11 @@ class Provincia(ModeloBase):
     super(Provincia, self).save(*args, **kwargs)
 
 class Ciudad(ModeloBase):
-  provincia = models.ForeignKey(Provincia, blank=True, null=True, verbose_name=u'Provincia', on_delete=models.CASCADE)
-  nombre = models.CharField(default='', max_length=100, verbose_name=u"Nombre")
-
-  @staticmethod
-  def flexbox_query(q, extra=None):
-    if extra:
-      return eval('Canton.objects.filter(Q(nombre__contains="%s")).filter(%s).distinct()[:25]' % (q,extra))
-    return Ciudad.objects.filter(Q(nombre__contains=q)).distinct()[:25]
-
-  def flexbox_repr(self):
-    return self.__str__()
+  provincia = models.ForeignKey(Provincia, blank=False, null=True, verbose_name=u'Provincia', on_delete=models.CASCADE)
+  nombre = models.CharField(default='',blank=False, null=True, max_length=100, verbose_name=u"Nombre")
 
   def __str__(self):
-    return u'%s' % self.nombre
+    return "{} - {}".format(self.provincia,self.nombre)
 
   class Meta:
     verbose_name = u"Canton"
@@ -118,15 +92,15 @@ class Vendedor(ModeloBase):
   nacimiento = models.DateField(verbose_name=u"Fecha de nacimiento", null=True, blank=True)
   sexo = models.ForeignKey(Sexo, default=2, verbose_name=u'Sexo', on_delete=models.CASCADE)
   email = models.CharField(default='', max_length=200, verbose_name=u"Correo electronico personal")
-  pais = models.ForeignKey(Pais, blank=True, null=True, verbose_name=u'País residencia', on_delete=models.SET_NULL)
-  provincia = models.ForeignKey(Provincia, blank=True, null=True, verbose_name=u"Provincia de residencia", on_delete=models.SET_NULL)
-  ciudad = models.ForeignKey(Ciudad, blank=True, null=True, verbose_name=u"Ciudad de residencia", on_delete=models.SET_NULL)
+  pais = models.ForeignKey(Pais, blank=False, null=True, verbose_name=u'País residencia', on_delete=models.SET_NULL)
+  provincia = models.ForeignKey(Provincia, blank=False, null=True, verbose_name=u"Provincia de residencia", on_delete=models.SET_NULL)
+  ciudad = models.ForeignKey(Ciudad, blank=False, null=True, verbose_name=u"Ciudad de residencia", on_delete=models.SET_NULL)
   direccion = models.CharField(default='', max_length=100, verbose_name=u"Calle principal", null=True, blank=True)
   celular = models.CharField(default='', max_length=50, verbose_name=u"Celular")
   #usuario = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
   def __str__(self):
-    return u'%s %s' % (self.apellido, self.nombre)
+    return '{} - {}'.format(self.apellido, self.nombre)
 
   class Meta:
     verbose_name = u"Vendedor"
@@ -134,32 +108,27 @@ class Vendedor(ModeloBase):
     ordering = ['apellido', 'nombre']
     unique_together = ('identificacion',)
 
-
+#*******************************************Televisor*********************************************************
 class Marca(ModeloBase):
-  nombreMarca = models.CharField(default='', max_length=100, verbose_name=u'Marca')
+  nombreMarca = models.CharField(default='',blank=False, null=True, max_length=100, unique=True, verbose_name='Marca')
 
   def __str__(self):
-    return u'%s' % self.nombreMarca
+    return '{}'.format(self.nombreMarca)
 
   class Meta:
     verbose_name = u"Marca de Televisor"
     verbose_name_plural = u"Marcas de Televisor"
-    unique_together = ('nombreMarca',)
-
-  def en_uso(self):
-    if self.item_set.values('id').filter(status=True).exists():
-      return True
-    return False
+    ordering = ['nombreMarca']
 
   def save(self, *args, **kwargs):
     self.nombreMarca = self.nombreMarca.upper()
     super(Marca, self).save(*args, **kwargs)
 
 class Panel(ModeloBase):
-  nombrePanel = models.CharField(default='', max_length=100, verbose_name=u'Panel')
+  nombrePanel = models.CharField(default='', blank=False, null=True,max_length=100, verbose_name=u'Panel')
 
   def __str__(self):
-    return u'%s' % self.nombrePanel
+    return '{}'.format(self.nombrePanel)
 
   class Meta:
     verbose_name = u"Panel"
@@ -176,7 +145,7 @@ class Panel(ModeloBase):
     super(Panel, self).save(*args, **kwargs)
 
 class Resolucion(ModeloBase):
-  nombreResol = models.CharField(default='', max_length=100, verbose_name=u'Resolución')
+  nombreResol = models.CharField(default='', blank=False, null=True,max_length=100, verbose_name=u'Resolución')
 
   def __str__(self):
     return u'%s' % self.nombreResol
@@ -197,13 +166,13 @@ class Resolucion(ModeloBase):
 
 class Televisor(ModeloBase):
   nombretv = models.CharField(default='', max_length=50, verbose_name=u'Televisor')
-  marca = models.ForeignKey(Marca,blank=True, null=True, default='', verbose_name=u'Marca',on_delete=models.SET_NULL)
-  pulgadas = models.CharField(default='', max_length=50, verbose_name=u'Pulgadas')
-  tipoPanel = models.ForeignKey(Panel,blank=True, null=True, default='', verbose_name=u'Panel',on_delete=models.SET_NULL)
-  resolucion = models.ForeignKey(Resolucion,blank=True, null=True,default='', max_length=50, verbose_name=u'Resolución',on_delete=models.SET_NULL)
+  marca = models.ForeignKey(Marca,blank=False,null=True,default='', verbose_name=u'Marca',on_delete=models.SET_NULL)
+  pulgadas = models.CharField(default='',blank=False,null=True, max_length=50, verbose_name=u'Pulgadas')
+  tipoPanel = models.ForeignKey(Panel,blank=False,null=True, default='', verbose_name=u'Panel',on_delete=models.SET_NULL)
+  resolucion = models.ForeignKey(Resolucion,blank=False,null=True,default='', max_length=50, verbose_name=u'Resolución',on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/televisores", blank=True, null=True)
-  costo = models.DecimalField(default=0, max_digits=7, decimal_places=2, verbose_name=u"Costo")
-  stock = models.IntegerField(default=0,blank=True, null=True, verbose_name=u"Stock")
+  costo = models.DecimalField(default=0, blank=False,null=True,max_digits=7, decimal_places=2, verbose_name=u"Costo")
+  stock = models.IntegerField(default=0,blank=False,null=True, verbose_name=u"Stock")
   estado = models.BooleanField(default=False)
 
   def get_image(self):
@@ -213,19 +182,19 @@ class Televisor(ModeloBase):
   pass
 
   def __str__(self):
-    return u'%s' % self.imagen
+    return '{}'.format(self.nombretv)
 
 #******************************************** Refrigeradora ********************************************************
 class MarcaRefri(ModeloBase):
-  marcaRefri = models.CharField(default='', max_length=100, verbose_name=u'Marca')
+  marcaRefri = models.CharField(default='',blank=False, null=True, max_length=100, verbose_name=u'Marca')
 
   def __str__(self):
-    return u'%s' % self.marcaRefri
+    return '{}'.format(self.marcaRefri)
 
   class Meta:
     verbose_name = u"Marca de Refri"
     verbose_name_plural = u"Marcas de Refri"
-    unique_together = ('marcaRefri',)
+    ordering = ['marcaRefri']
 
   def en_uso(self):
     if self.item_set.values('id').filter(status=True).exists():
@@ -237,15 +206,15 @@ class MarcaRefri(ModeloBase):
     super(MarcaRefri, self).save(*args, **kwargs)
 
 class ModeloRefri(ModeloBase):
-  modeloRefri = models.CharField(default='', max_length=100, verbose_name=u'Modelo')
+  modeloRefri = models.CharField(default='', blank=False, null=True,max_length=100, verbose_name=u'Modelo')
 
   def __str__(self):
-    return u'%s' % self.modeloRefri
+    return '{}'.format(self.modeloRefri)
 
   class Meta:
     verbose_name = u"Modelo de Refri"
     verbose_name_plural = u"Modelos de Refri"
-    unique_together = ('modeloRefri',)
+    ordering = ['modeloRefri']
 
   def en_uso(self):
     if self.item_set.values('id').filter(status=True).exists():
@@ -257,15 +226,15 @@ class ModeloRefri(ModeloBase):
     super(ModeloRefri, self).save(*args, **kwargs)
 
 class Color(ModeloBase):
-  color = models.CharField(default='', max_length=100, verbose_name=u'Color')
+  color = models.CharField(default='',blank=False, null=True, max_length=100, verbose_name=u'Color')
 
   def __str__(self):
-    return u'%s' % self.color
+    return '{}'.format(self.color)
 
   class Meta:
     verbose_name = u"Color"
     verbose_name_plural = u"Colores"
-    unique_together = ('color',)
+    ordering = ['color']
 
   def en_uso(self):
     if self.item_set.values('id').filter(status=True).exists():
@@ -280,9 +249,9 @@ class Refrigeradora(ModeloBase):
   nombrerefrigeradora = models.CharField(default='', max_length=50, verbose_name=u'Televisor')
   refrigeradoramarcaRefri = models.ForeignKey(MarcaRefri,blank=True, null=True, default='', verbose_name=u'Marca',on_delete=models.SET_NULL)
   refrigeradoramodeloRefri = models.ForeignKey(ModeloRefri,default='',blank=True, null=True, verbose_name=u'Modelo',on_delete=models.SET_NULL)
-  capacidadLitros = models.IntegerField(default=0, blank=True, null=True,verbose_name=u"Litros")
+  capacidadLitros = models.IntegerField(default=0,verbose_name=u"Litros")
   dimensiones = models.CharField(default='0x0x0', max_length=50, verbose_name=u'Dimensiones altura*hancho*profundidad')
-  refrigeradoraColor = models.ForeignKey(Color,blank=True, null=True, default='', verbose_name=u'Color',on_delete=models.SET_NULL)
+  refrigeradoraColor = models.ForeignKey(Color,blank=False, null=True, default='', verbose_name=u'Color',on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/refrigeradora", blank=True, null=True)
   costo = models.DecimalField(default=0, max_digits=4, decimal_places=2, verbose_name=u"Costo")
   stock = models.IntegerField(default=0,  verbose_name=u"Stock")
@@ -297,15 +266,15 @@ class Refrigeradora(ModeloBase):
 #******************************************** Microondas ********************************************************
 
 class marcaMicroondas(ModeloBase):
-  marcaMicroondas = models.CharField(default='', max_length=20, verbose_name=u'Marca')
+  marcaMicroondas = models.CharField(default='',blank=False, null=True, max_length=20, verbose_name=u'Marca')
 
   def __str__(self):
-    return u'%s' % self.marcaMicroondas
+    return '{}'.format(self.marcaMicroondas)
 
   class Meta:
     verbose_name = u"Marca de Microonda"
     verbose_name_plural = u"Marcas de Microonda"
-    unique_together = ('marcaMicroondas',)
+    ordering = ['marcaMicroondas']
 
   def en_uso(self):
     if self.item_set.values('id').filter(status=True).exists():
@@ -321,12 +290,12 @@ class modeloMicroondas(ModeloBase):
   modelo = models.CharField(default='', max_length=20, verbose_name=u'Modelo')
 
   def __str__(self):
-    return u'%s' % self.modelo
+    return '{}'.format(self.modelo)
 
   class Meta:
     verbose_name = u"Modelo de Microonda"
     verbose_name_plural = u"Modelo de Microondas"
-    unique_together = ('modelo',)
+    ordering = ['modelo']
 
   def en_uso(self):
     if self.item_set.values('id').filter(status=True).exists():

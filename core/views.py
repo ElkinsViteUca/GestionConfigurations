@@ -1,7 +1,3 @@
-from django.http import HttpResponseRedirect, JsonResponse
-from django.utils import timezone
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView,ListView
@@ -55,14 +51,6 @@ class televisorCreateView(CreateView):
       context['form_title'] = 'Formulario TV'
       return context
 
-   # def post(self, request, *args, **kwargs):
-   #   stock = self.request.POST['stock']
-   #   form = TelevisorForm(request.POST)
-   #   form.save()
-   #   print(stock)
-   #   return JsonResponse({'message': 'Todo bien'})
-
-
 
 class actualizarTelevisor(UpdateView):
   model = Televisor
@@ -80,27 +68,6 @@ class actualizarTelevisor(UpdateView):
     context['table_title'] = 'Listado TV'
     return context
 
-  # def post(self, request, *args, **kwargs):
-  #   stock = self.request.POST['stock']
-  #   print(stock)
-  #   return JsonResponse({'message': 'Todo bien'})
-
-  # def post(self, request, *args, **kwargs):
-  #   self.object = self.get_object()
-  #
-  #   # Obtener el formulario con los datos recibidos por POST y la instancia actual
-  #   form = self.get_form()
-  #
-  #   if form.is_valid():
-  #     # Guardar los datos del formulario en la instancia actual del Televisor
-  #     self.object.stock = request.POST.get('stock', '')  # Actualiza el campo 'stock' según necesites
-  #     self.object.save()
-  #
-  #     # Redirigir a la URL de éxito
-  #     return HttpResponseRedirect(self.get_success_url())
-  #   else:
-  #     # Si el formulario no es válido, volver a renderizar el formulario con los errores
-  #     return self.form_invalid(form)
 
 
 class eliminarTelevisor(DeleteView):
