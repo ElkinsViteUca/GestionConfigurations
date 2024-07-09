@@ -23,7 +23,7 @@ class TelevisorForm(ModelForm):
   def clean_costo(self):
     object = self.cleaned_data.get('costo')
     if object <= 0:
-      raise forms.ValidationError("El precio debe ser mayor que cero.")
+      raise forms.ValidationError("El precio debe ser mayor que {}.".format(object))
     return object
 
   def clean_nombretv(self):
@@ -58,9 +58,9 @@ class RefrigeradoraForm(ModelForm):
     fields = ['nombrerefrigeradora','refrigeradoramarcaRefri','refrigeradoramodeloRefri','capacidadLitros',
               'dimensiones','refrigeradoraColor','imagen','costo','stock']
     widgets = {
-      'nombrerefrigeradora': forms.TextInput(attrs={'class': 'form-control','placeholder':'Ingrese la Refrigeradora'}),
+      'nombrerefrigeradora': forms.TextInput(attrs={'class': 'form-control','placeholder':'Ingrese la Refrigeradorass'}),
       'refrigeradoramarcaRefri': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Ingrese la Marca'}),
-      'refrigeradoramodeloRefri': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Modelo'}),
+      'refrigeradoramodeloRefri': forms.Select(attrs={'class': 'form-control', 'placeholder': 'Ingrese el Modelo','required': True,}),
       'capacidadLitros': forms.NumberInput(attrs={'class': 'form-control', 'required': True, 'placeholder': 'Ingrese los Litros'}),
       'dimensiones': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese las Dimensiones'}),
       'refrigeradoraColor': forms.Select(attrs={'class': 'form-control'}),
@@ -79,14 +79,14 @@ class RefrigeradoraForm(ModelForm):
   def clean_capacidadLitros(self):
     object = self.cleaned_data.get('capacidadLitros')
     if object <= 0 or object > 80:
-      raise forms.ValidationError("Recuerda los litros debe ser mayor que 0 y no superar los 80 listros y tu tienes {}.".format(object))
+      raise forms.ValidationError("Recuerda los litros debe ser mayor que 0 y no superar los 80 litros y tu tienes {}.".format(object))
     return object
 
 
   def clean_costo(self):
     object = self.cleaned_data.get('costo')
     if object <= 0:
-      raise forms.ValidationError("El precio debe ser mayor que cero.")
+      raise forms.ValidationError("El precio debe ser mayor que cero y tu tienes {}.".format(object))
     return object
 
   def clean_stock(self):
@@ -123,11 +123,9 @@ class MicroondasForm(ModelForm):
 
   def clean_capacidad(self):
     object = self.cleaned_data.get('capacidad')
-    if not object.isnumeric():
-      raise forms.ValidationError("Recuerad ingresar sólo datos numericos en {}.".format(object))
-
-    if len(object)>3 or len(object)<0 :
-      raise forms.ValidationError("Recuerda ingresar sólo hasta 3 digitos en {} y que sea positivo.".format(object))
+    if object <= 0 or object > 80:
+      raise forms.ValidationError(
+        "Recuerda los litros debe ser mayor que 0 y no superar los 80 litros y tu tienes {}.".format(object))
     return object
   def clean_costo(self):
     object = self.cleaned_data.get('costo')

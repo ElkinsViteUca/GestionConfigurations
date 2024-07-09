@@ -247,8 +247,8 @@ class Color(ModeloBase):
 
 class Refrigeradora(ModeloBase):
   nombrerefrigeradora = models.CharField(default='', max_length=50, verbose_name=u'Televisor')
-  refrigeradoramarcaRefri = models.ForeignKey(MarcaRefri,blank=True, null=True, default='', verbose_name=u'Marca',on_delete=models.SET_NULL)
-  refrigeradoramodeloRefri = models.ForeignKey(ModeloRefri,default='',blank=True, null=True, verbose_name=u'Modelo',on_delete=models.SET_NULL)
+  refrigeradoramarcaRefri = models.ForeignKey(MarcaRefri,blank=False, null=True, default='', verbose_name=u'Marca',on_delete=models.SET_NULL)
+  refrigeradoramodeloRefri = models.ForeignKey(ModeloRefri,default='',blank=False, null=True, verbose_name=u'Modelo',on_delete=models.SET_NULL)
   capacidadLitros = models.IntegerField(default=0,verbose_name=u"Litros")
   dimensiones = models.CharField(default='0x0x0', max_length=50, verbose_name=u'Dimensiones altura*hancho*profundidad')
   refrigeradoraColor = models.ForeignKey(Color,blank=False, null=True, default='', verbose_name=u'Color',on_delete=models.SET_NULL)
@@ -308,13 +308,13 @@ class modeloMicroondas(ModeloBase):
 
 class Microondas(ModeloBase):
   nombremicroondas = models.CharField(default='', max_length=20, verbose_name='Microondas')
-  marcaMicroondas = models.ForeignKey(marcaMicroondas, blank=True, null=True, default='', verbose_name=u'Marca',
+  marcaMicroondas = models.ForeignKey(marcaMicroondas, blank=False, null=True, default='', verbose_name=u'Marca',
                                               on_delete=models.SET_NULL)
-  modelo = models.ForeignKey(modeloMicroondas, default='', blank=True, null=True, verbose_name=u'Modelo',
+  modelo = models.ForeignKey(modeloMicroondas, default='', blank=False, null=True, verbose_name=u'Modelo',
                                                on_delete=models.SET_NULL)
   capacidad = models.IntegerField(default=0, blank=True, null=True, verbose_name=u"Capacidad")
   dimensiones = models.CharField(default='0x0x0', max_length=50, verbose_name=u'Dimensiones altura*hancho*profundidad')
-  microondasColor = models.ForeignKey(Color, blank=True, null=True, default='', verbose_name=u'Color',
+  microondasColor = models.ForeignKey(Color, blank=False, null=True, default='', verbose_name=u'Color',
                                          on_delete=models.SET_NULL)
   imagen = models.FileField("Foto", upload_to="core/microondas", blank=True, null=True)
   costo = models.DecimalField(default=0, max_digits=7, decimal_places=2, verbose_name=u"Costo")
